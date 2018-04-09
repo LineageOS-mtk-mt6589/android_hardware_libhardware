@@ -30,6 +30,7 @@
 /** Base path of the hal modules */
 #define HAL_LIBRARY_PATH1 "/system/lib/hw"
 #define HAL_LIBRARY_PATH2 "/vendor/lib/hw"
+#define HAL_LIBRARY_PATH3 "/system/lib"
 
 /**
  * There are a set of variant filename for modules. The form of the filename
@@ -47,7 +48,8 @@ static const char *variant_keys[] = {
                        file on the emulator. */
     "ro.product.board",
     "ro.board.platform",
-    "ro.arch"
+    "ro.arch",
+    "ro.btstack"
 };
 
 static const int HAL_VARIANT_KEYS_COUNT =
@@ -154,6 +156,10 @@ int hw_get_module_by_class(const char *class_id, const char *inst,
             snprintf(path, sizeof(path), "%s/%s.%s.so",
                      HAL_LIBRARY_PATH1, name, prop);
             if (access(path, R_OK) == 0) break;
+
+            snprintf(path, sizeof(path), "%s/%s.%s.so",
+                     HAL_LIBRARY_PATH3, name, prop);
+            if (access(path, R_OK) == 0) break;
         } else {
             snprintf(path, sizeof(path), "%s/%s.default.so",
                      HAL_LIBRARY_PATH2, name);
@@ -161,6 +167,10 @@ int hw_get_module_by_class(const char *class_id, const char *inst,
 
             snprintf(path, sizeof(path), "%s/%s.default.so",
                      HAL_LIBRARY_PATH1, name);
+            if (access(path, R_OK) == 0) break;
+
+            snprintf(path, sizeof(path), "%s/%s.default.so",
+                     HAL_LIBRARY_PATH3, name);
             if (access(path, R_OK) == 0) break;
         }
     }
