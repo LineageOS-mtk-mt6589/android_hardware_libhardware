@@ -139,13 +139,38 @@ enum {
     /* SEC Private usage , for Overlay path at HWC */
     GRALLOC_USAGE_HWC_HWOVERLAY         = 0x20000000,
 #endif
+#ifdef MTK_HARDWARE
+    GRALLOC_USAGE_SECURE                = 0x01000000,
+#endif
 };
 
 enum {
     /* Gralloc perform enums */
     GRALLOC_MODULE_PERFORM_UPDATE_BUFFER_GEOMETRY = 0,
+
     GRALLOC_MODULE_PERFORM_PRIVATE_START
+
 };
+
+#ifdef MTK_HARDWARE
+// MTK internal extra buffer usage flags
+// for API native_window_set_usage_ex()
+enum {
+    // BYTE#2 for S3D control
+    EXTRA_USAGE_S3D_UNKNOWN        = 0x00100000,    // for content layout
+    EXTRA_USAGE_S3D_SIDE_BY_SIDE   = 0x00200000,
+    EXTRA_USAGE_S3D_TOP_AND_BOTTOM = 0x00400000,
+    EXTRA_USAGE_S3D_LR_SWAPPED     = 0x00800000,
+
+    EXTRA_USAGE_S3D_RESERVED_BIT0  = 0x00010000,    // reserved bits
+    EXTRA_USAGE_S3D_RESERVED_BIT1  = 0x00020000,
+    EXTRA_USAGE_S3D_RESERVED_BIT2  = 0x00040000,
+    EXTRA_USAGE_S3D_RESERVED_BIT3  = 0x00080000,
+
+    // for init
+    EXTRA_USAGE_INIT_VALUE         = EXTRA_USAGE_S3D_UNKNOWN,
+};
+#endif
 
 /*****************************************************************************/
 

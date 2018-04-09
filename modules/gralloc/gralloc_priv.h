@@ -29,6 +29,14 @@
 
 #include <linux/fb.h>
 
+#ifdef MTK_HARDWARE
+#ifdef MTK_ION_SUPPORT
+#include <linux/ion_drv.h>
+#include <linux/ion.h>
+#include <ion/ion.h>
+#endif
+#endif // MTK_DEFAULT_AOSP
+
 /*****************************************************************************/
 
 struct private_module_t;
@@ -51,6 +59,12 @@ struct private_module_t {
     float xdpi;
     float ydpi;
     float fps;
+
+#ifdef MTK_HARDWARE
+#ifdef MTK_ION_SUPPORT
+    int ion_client;
+#endif
+#endif // MTK_DEFAULT_AOSP
 };
 
 /*****************************************************************************/
@@ -78,14 +92,36 @@ struct private_handle_t {
     int     base;
     int     pid;
 
+#ifdef MTK_HARDWARE
+    struct ion_handle *     ion_hnd;
+    int     mva;
+
+    int     width;
+    int     height;
+    int     format;
+    int     stride;
+    int     vertical_stride;
+    int     usage;
+#define MTK_NUM_INTS 8
+#endif
+
 #ifdef __cplusplus
+#ifdef MTK_HARDWARE
+    static const int sNumInts = 6 + MTK_NUM_INTS;
+#else
     static const int sNumInts = 6;
+#endif
     static const int sNumFds = 1;
     static const int sMagic = 0x3141592;
 
     private_handle_t(int fd, int size, int flags) :
         fd(fd), magic(sMagic), flags(flags), size(size), offset(0),
         base(0), pid(getpid())
+#ifdef MTK_HARDWARE
+        , ion_hnd(NULL), mva(-1), 
+        width(0), height(0), format(0),
+        stride(0), vertical_stride(0), usage(0)
+#endif
     {
         version = sizeof(native_handle);
         numInts = sNumInts;
