@@ -431,6 +431,9 @@ enum effect_command_e {
    EFFECT_CMD_SET_AUDIO_MODE,       // set the audio mode (normal, ring, ...)
    EFFECT_CMD_SET_CONFIG_REVERSE,   // configure effect engine reverse stream(see effect_config_t)
    EFFECT_CMD_SET_INPUT_DEVICE,     // set capture device (see audio.h, audio_devices_t)
+#ifdef MTK_HARDWARE
+   EFFECT_CMD_CLEARBUF,
+#endif
    EFFECT_CMD_GET_CONFIG,           // read effect engine configuration
    EFFECT_CMD_GET_CONFIG_REVERSE,   // read configure effect engine reverse stream configuration
    EFFECT_CMD_GET_FEATURE_SUPPORTED_CONFIGS,// get all supported configurations for a feature.
@@ -440,6 +443,17 @@ enum effect_command_e {
    EFFECT_CMD_OFFLOAD,              // set if effect thread is an offload one,
                                     // send the ioHandle of the effect thread
    EFFECT_CMD_FIRST_PROPRIETARY = 0x10000 // first proprietary command code
+#ifdef MTK_HARDWARE
+#if defined(DOLBY_DAP_OPENSLES_PREGAIN)
+,   EFFECT_CMD_DOLBY_SET_PREGAIN    // set ds pregain
+#endif // DOLBY_DAP_OPENSLES_PREGAIN
+#if defined(DOLBY_DAP_OPENSLES_POSTGAIN)
+,   EFFECT_CMD_DOLBY_SET_POSTGAIN   // set ds postgain
+#endif // DOLBY_DAP_OPENSLES_POSTGAIN
+#ifdef DOLBY_DAP_BYPASS_SOUND_TYPES
+,   EFFECT_CMD_DOLBY_DAP_SET_BYPASS     // set ds in bypass mode.
+#endif // DOLBY_DAP_BYPASS_SOUND_TYPES
+#endif
 };
 
 //==================================================================================================
